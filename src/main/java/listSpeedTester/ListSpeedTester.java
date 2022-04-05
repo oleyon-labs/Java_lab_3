@@ -4,37 +4,46 @@ import java.lang.reflect.InvocationTargetException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Consumer;
 
+/**
+ * Класс, тестирующий разные списки на различные операции, задаваемые пользователем
+ */
 public class ListSpeedTester {
 
+    private List list;
 
-    public ListSpeedTester(int count, Class<? extends List> listToTest){
-
+    /**
+     * Инициализирует тестер заданным списком
+     * @param listToTest тип задаваемого списка
+     */
+    public ListSpeedTester(Class<? extends List> listToTest) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        list = listToTest.getDeclaredConstructor().newInstance();
     }
 
-    public static long testSetSpeed(int count, Class<? extends List> listToTest) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, InterruptedException {
+    /**
+     * замеряет среднюю скорость выполнения метода
+     * @param count количество выполнений
+     * @param initialState устанавливает начальное состояние списка перед тестированием
+     * @param function выполняемый метод
+     * @return среднее время выполнения метода в наносекундах
+     */
+    public double testSpeed(int count, Consumer<List> initialState,Consumer<List> function) {
 
-        List list = listToTest.getDeclaredConstructor().newInstance();
-
-        Instant start = Instant.now();
-
+        clearList();
+        initialState.accept(list);
+        long start = System.nanoTime();
         for (int i = 0; i < count; i++) {
-            list.add(i);
+            function.accept(list);
         }
-
-        Instant finish = Instant.now();
-
-
-        return Duration.between(start, finish).toNanos();
-        //System.out.println("Прошло времени, мс: " + elapsed);
-
-
-
-
+        long finish = System.nanoTime();
+        return (finish-start)/(double)count;
     }
 
-    public long testGetSpeed(int count, Class<? extends List> listToTest){
-        return 0;
+    /**
+     * очищает список
+     */
+    private void clearList(){
+        list.clear();
     }
 }
