@@ -1,8 +1,6 @@
-package listSpeedTester;
+package com.ole.listSpeedTester;
 
 import java.lang.reflect.InvocationTargetException;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.List;
 import java.util.function.Consumer;
 

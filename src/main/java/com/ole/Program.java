@@ -1,4 +1,6 @@
-import listSpeedTester.ListSpeedTester;
+package com.ole;
+
+import com.ole.listSpeedTester.ListSpeedTester;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.LinkedList;
